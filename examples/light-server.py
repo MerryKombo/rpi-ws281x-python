@@ -40,13 +40,15 @@ board_leds = {
     'dami-3bplus-2': [7, 17, 18, 19],
 }
 
-
 def light_up_board(board_name, color):
     """Light up all LEDs linked to a board."""
     if board_name in board_leds:
         for led in board_leds[board_name]:
             strip.setPixelColor(led, color)
             strip.show()
+        logging.info(f'Set color {color} for board {board_name}')
+    else:
+        logging.warning(f'Board {board_name} not found in board_leds dictionary')
 
 @app.route('/light', methods=['POST'])
 def light_up():
@@ -61,6 +63,7 @@ def light_up():
 
         # Convert RGB values to a Color
         color = Color(*color)
+        logging.info(f'Converted RGB values to color {color}')
 
     light_up_board(board_name, color)
     return 'OK', 200
