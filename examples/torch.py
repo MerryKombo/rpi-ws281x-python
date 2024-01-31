@@ -20,23 +20,30 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-def torch_effect2(strip, base_r, base_g, base_b):
-    while True:
-        for i in range(strip.numPixels()):
-            flicker = random.randint(0, 55)
-            r = max(base_r - flicker, 0)
-            g = max(base_g - flicker, 0)
-            b = max(base_b - flicker, 0)
-            strip.setPixelColor(i, Color(r, g, b))
-        strip.show()
-        time.sleep(random.uniform(0.01, 0.113))  # Adjust for desired flickering speed
-def torch_effect(strip, flame_min, flame_max):
+def torch_effect3(strip, flame_min, flame_max):
     while True:
         for i in range(strip.numPixels()):
             r = random.randint(flame_min, flame_max)
-            g = r // 2
-            b = r // 3
+            g = min(max(int(r * 0.8), 0), 255)  # Green component is 80% of red component
+            b = min(max(int(r * 0.2), 0), 255)  # Blue component is 20% of red component
             strip.setPixelColor(i, Color(r, g, b))
+        strip.show()
+        time.sleep(0.1)  # Adjust for desired flickering speed
+def torch_effect2(strip, base_r, base_g, base_b):
+    for i in range(strip.numPixels()):
+        flicker = random.randint(0, 55)
+        r = max(base_r - flicker, 0)
+        g = max(base_g - flicker, 0)
+        b = max(base_b - flicker, 0)
+        strip.setPixelColor(i, Color(r, g, b))
+        strip.show()
+        time.sleep(random.uniform(0.01, 0.113))  # Adjust for desired flickering speed
+def torch_effect(strip, flame_min, flame_max):
+    for i in range(strip.numPixels()):
+        r = random.randint(flame_min, flame_max)
+        g = r // 2
+        b = r // 3
+        strip.setPixelColor(i, Color(r, g, b))
         strip.show()
         time.sleep(0.1)  # Adjust for desired flickering speed
 
@@ -124,6 +131,9 @@ if __name__ == '__main__':
 
         while True:
 
+            print('Torch effect 3.')
+            base_r, base_g, base_b = 226, 121, 35  # Base color for the flame
+            torch_effect3(strip, base_r, base_g, base_b)  # Call the torch effect function
             print('Torch effect 2.')
             base_r, base_g, base_b = 226, 121, 35  # Base color for the flame
             torch_effect2(strip, base_r, base_g, base_b)  # Call the torch effect function
