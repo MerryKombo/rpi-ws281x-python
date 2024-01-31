@@ -20,6 +20,42 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
+def torch_effect4(strip, flame_min, flame_max, steps=10):
+    # Initialize the color of each LED
+    colors = [Color(flame_max, flame_max // 3, flame_max // 20) for _ in range(strip.numPixels())]
+    target_colors = list(colors)
+    color_steps = [Color(0, 0, 0) for _ in range(strip.numPixels())]
+
+    while True:
+        for i in range(strip.numPixels()):
+            # Occasionally generate a new target color for an LED
+            if random.random() < 0.05:
+                r = random.randint(flame_min, flame_max)
+                g = min(max(int(r * 0.3), 0), 255)  # Green component is 30% of red component
+                b = min(max(int(r * 0.05), 0), 255)  # Blue component is 5% of red component
+                target_colors[i] = Color(r, g, b)
+
+                # Calculate the color steps for the transition
+                dr = (r - colors[i].r) / steps
+                dg = (g - colors[i].g) / steps
+                db = (b - colors[i].b) / steps
+                color_steps[i] = Color(dr, dg, db)
+
+            # Move the color one step closer to the target color
+            colors[i] = Color(
+                min(max(colors[i].r + color_steps[i].r, 0), 255),
+                min(max(colors[i].g + color_steps[i].g, 0), 255),
+                min(max(colors[i].b + color_steps[i].b, 0), 255)
+            )
+
+            # Set the color of the LED
+            strip.setPixelColor(i, colors[i])
+
+        # Update the LED strip
+        strip.show()
+
+        # Adjust for desired flickering speed
+        time.sleep(0.02)
 def torch_effect3(strip, flame_min, flame_max):
     # Initialize the color of each LED
     colors = [Color(flame_max, flame_max // 3, flame_max // 20) for _ in range(strip.numPixels())]
@@ -147,6 +183,8 @@ if __name__ == '__main__':
     try:
 
         while True:
+            print('Torch effect 4.')
+            torch_effect4(strip, 100, 255)  # Call the torch effect function
             print('Torch effect 3.')
             torch_effect3(strip, 100, 255)  # Call the torch effect function
             print('Torch effect 2.')
