@@ -11,6 +11,7 @@ import time
 import requests
 import socket
 import matplotlib.cm as cm
+import matplotlib.colors as mcolors
 import numpy as np
 
 load_1, load_5, load_15 = os.getloadavg()
@@ -30,11 +31,23 @@ points = np.linspace(0, 1, 40)
 # Use the RdYlGn (Red-Yellow-Green) reversed colormap
 # cmap = cm.get_cmap('RdYlGn_r')
 # Use the RdBu (Red-Blue) colormap, reversed
-cmap = cm.get_cmap('RdBu_r')
+# cmap = cm.get_cmap('RdBu_r')
 # Generate the colors
+# colors = [cmap(point) for point in points]
+
+# Define the colors for the colormap
+colors = ["blue", "darkred"]
+
+# Create the colormap
+cmap = mcolors.LinearSegmentedColormap.from_list("BlueToDarkRed", colors)
+
+# Now you can use this colormap in your code
 colors = [cmap(point) for point in points]
 
 # This will give you an array of 40 colors, going from green to red, which you can use to represent load from 0.0 to 4.0 in increments of 0.1.
+# Convert colors to 8-bit RGB values
+# colors = [(int(r*255), int(g*255), int(b*255)) for r, g, b, _ in colors]
+
 # Convert colors to 8-bit RGB values
 colors = [(int(r*255), int(g*255), int(b*255)) for r, g, b, _ in colors]
 
