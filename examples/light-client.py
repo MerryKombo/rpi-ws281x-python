@@ -17,7 +17,12 @@ if __name__ == '__main__':
     # Get the hostname
     board_name = socket.gethostname()
 
-    # Define the color
-    color = [255, 0, 0]  # Red
+    # Define the colors
+    colors = {
+        "red": (255, 0, 0),
+        "green": (0, 255, 0),
+        "blue": (0, 0, 255),
+        # add more colors as needed
+    }
 
-    send_request(board_name, color)
+    send_request(board_name, colors["green"])
