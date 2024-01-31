@@ -15,3 +15,8 @@ library/debian/
 dist/
 __pycache__
 .DS_Store
+bin/
+lib/
+lib64
+nohup.out
+

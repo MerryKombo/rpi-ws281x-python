@@ -8,7 +8,7 @@ import time
 from rpi_ws281x import ws, Color, Adafruit_NeoPixel
 
 # LED strip configuration:
-LED_1_COUNT = 30        # Number of LED pixels.
+LED_1_COUNT = 24        # Number of LED pixels.
 LED_1_PIN = 18          # GPIO pin connected to the pixels (must support PWM! GPIO 13 and 18 on RPi 3).
 LED_1_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_1_DMA = 10          # DMA channel to use for generating signal (Between 1 and 14)
