@@ -25,4 +25,4 @@ if __name__ == '__main__':
         # add more colors as needed
     }
 
-    send_request(board_name, colors["green"])
+    send_request(board_name, colors["blue"])
