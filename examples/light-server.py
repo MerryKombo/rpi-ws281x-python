@@ -55,14 +55,14 @@ def light_up():
     color = data.get('color')
 
     # Check if color is a string (color name) or a list/tuple (RGB values)
-    # If it is a tuple of RGB values, the RGB values are passed to the Color function to create a color.
-    # If the color is a string (a color name), it is used as is.
     if isinstance(color, list) or isinstance(color, tuple):
+        # Log the RGB values
+        logging.info(f'Received color RGB values {color} for board {board_name}')
+
         # Convert RGB values to a Color
         color = Color(*color)
 
     light_up_board(board_name, color)
-    logging.info(f'Received color {color} for board {board_name}')
     return 'OK', 200
 
 
