@@ -41,15 +41,11 @@ def torch_effect4(strip, flame_min, flame_max, steps=10):
                 db = (b - colors[i].b) / steps
                 color_steps[i] = (dr, dg, db)
 
-                # print(f"LED {i}: target color = ({r}, {g}, {b}), color steps = ({dr}, {dg}, {db})")
-
             # Move the color one step closer to the target color
             r = min(max(colors[i].r + color_steps[i][0], 0), 255)
             g = min(max(colors[i].g + color_steps[i][1], 0), 255)
             b = min(max(colors[i].b + color_steps[i][2], 0), 255)
             colors[i] = Color(int(r), int(g), int(b))
-
-            print(f"LED {i}: current color = ({colors[i].r}, {colors[i].g}, {colors[i].b})")
 
             # Set the color of the LED
             strip.setPixelColor(i, colors[i])
@@ -57,8 +53,8 @@ def torch_effect4(strip, flame_min, flame_max, steps=10):
         # Update the LED strip
         strip.show()
 
-        # Adjust for desired flickering speed
-        time.sleep(0.02)
+        # Adjust for desired flickering speed with a bit of randomness
+        time.sleep(random.uniform(0.01, 0.03))
 def torch_effect3(strip, flame_min, flame_max):
     # Initialize the color of each LED
     colors = [Color(flame_max, flame_max // 3, flame_max // 20) for _ in range(strip.numPixels())]
@@ -187,7 +183,7 @@ if __name__ == '__main__':
 
         while True:
             print('Torch effect 4.')
-            torch_effect4(strip, 100, 255, steps=50)  # Call the torch effect function
+            torch_effect4(strip, 100, 255, steps=10)  # Call the torch effect function
             print('Torch effect 3.')
             torch_effect3(strip, 100, 255)  # Call the torch effect function
             print('Torch effect 2.')
