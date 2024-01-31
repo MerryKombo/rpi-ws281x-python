@@ -20,16 +20,27 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-
 def torch_effect3(strip, flame_min, flame_max):
+    # Initialize the color of each LED
+    colors = [Color(flame_max, flame_max // 2, flame_max // 3) for _ in range(strip.numPixels())]
+
     while True:
         for i in range(strip.numPixels()):
-            r = random.randint(flame_min, flame_max)
-            g = min(max(int(r * 0.6), 0), 255)  # Green component is 60% of red component
-            b = min(max(int(r * 0.1), 0), 255)  # Blue component is 10% of red component
-            strip.setPixelColor(i, Color(r, g, b))
+            # Occasionally generate a new color for an LED
+            if random.random() < 0.1:
+                r = random.randint(flame_min, flame_max)
+                g = min(max(int(r * 0.4), 0), 255)  # Green component is 40% of red component
+                b = min(max(int(r * 0.05), 0), 255)  # Blue component is 5% of red component
+                colors[i] = Color(r, g, b)
+
+            # Set the color of the LED
+            strip.setPixelColor(i, colors[i])
+
+        # Update the LED strip
         strip.show()
-        time.sleep(0.1)  # Adjust for desired flickering speed
+
+        # Adjust for desired flickering speed
+        time.sleep(0.1)
 
 
 def torch_effect2(strip, base_r, base_g, base_b):
