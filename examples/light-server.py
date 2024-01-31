@@ -7,6 +7,10 @@
 
 from flask import Flask, request
 from rpi_ws281x import PixelStrip, Color
+import logging
+
+# Sets up the logging to output messages of level INFO and above.
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
@@ -44,13 +48,15 @@ def light_up_board(board_name, color):
             strip.setPixelColor(led, color)
             strip.show()
 
-
 @app.route('/light', methods=['POST'])
 def light_up():
     data = request.get_json()
     board_name = data.get('board_name')
     color = data.get('color')
     light_up_board(board_name, Color(*color))
+    #  The logging.info function logs a message with level INFO.
+    #  The message is a formatted string that includes the color and board name received in the POST request.
+    logging.info(f'Received color {color} for board {board_name}')
     return 'OK', 200
 
 
