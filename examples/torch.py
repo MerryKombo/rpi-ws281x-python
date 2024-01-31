@@ -22,14 +22,14 @@ LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 def torch_effect3(strip, flame_min, flame_max):
     # Initialize the color of each LED
-    colors = [Color(flame_max, flame_max // 2, flame_max // 3) for _ in range(strip.numPixels())]
+    colors = [Color(flame_max, flame_max // 3, flame_max // 20) for _ in range(strip.numPixels())]
 
     while True:
         for i in range(strip.numPixels()):
             # Occasionally generate a new color for an LED
-            if random.random() < 0.1:
+            if random.random() < 0.05:
                 r = random.randint(flame_min, flame_max)
-                g = min(max(int(r * 0.4), 0), 255)  # Green component is 40% of red component
+                g = min(max(int(r * 0.3), 0), 255)  # Green component is 30% of red component
                 b = min(max(int(r * 0.05), 0), 255)  # Blue component is 5% of red component
                 colors[i] = Color(r, g, b)
 
@@ -40,7 +40,7 @@ def torch_effect3(strip, flame_min, flame_max):
         strip.show()
 
         # Adjust for desired flickering speed
-        time.sleep(0.1)
+        time.sleep(0.2)
 
 
 def torch_effect2(strip, base_r, base_g, base_b):
