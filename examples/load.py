@@ -43,11 +43,6 @@ def send_color_to_server(board_name, color):
     response = requests.post(url, json=data)
     print(f'Response from server: {response.text}')
 
-
-if __name__ == '__main__':
-    # Get the hostname
-    board_name = socket.gethostname()
-
 while True:
     # Get the 1-minute load average
     load_1, _, _ = os.getloadavg()
@@ -62,7 +57,7 @@ while True:
     print(f"1 minute load: {load_1}, color: {color}")
 
     # Send the color to the server
-    send_color_to_server('your_board_name', color)
+    send_color_to_server(socket.gethostname(), color)
 
     # Wait for a bit before the next iteration
     time.sleep(5)
