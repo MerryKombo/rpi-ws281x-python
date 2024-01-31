@@ -15,6 +15,13 @@ strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRI
 # Intialize the library (must be called once before other functions).
 strip.begin()
 
+def colorWipe(strip, color, wait_ms=50):
+    """Wipe color across display a pixel at a time."""
+    for i in range(strip.numPixels()):
+        strip.setPixelColor(i, color)
+        strip.show()
+        time.sleep(wait_ms / 1000.0)
+
 def light_up_boards(strip, board_leds):
     """Light up all LEDs linked to each board."""
     for board, leds in board_leds.items():
