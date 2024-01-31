@@ -24,7 +24,7 @@ def torch_effect4(strip, flame_min, flame_max, steps=10):
     # Initialize the color of each LED
     colors = [Color(flame_max, flame_max // 3, flame_max // 20) for _ in range(strip.numPixels())]
     target_colors = list(colors)
-    color_steps = [Color(0, 0, 0) for _ in range(strip.numPixels())]
+    color_steps = [(0.0, 0.0, 0.0) for _ in range(strip.numPixels())]  # Store color steps as floats
 
     while True:
         for i in range(strip.numPixels()):
@@ -39,16 +39,15 @@ def torch_effect4(strip, flame_min, flame_max, steps=10):
                 dr = (r - colors[i].r) / steps
                 dg = (g - colors[i].g) / steps
                 db = (b - colors[i].b) / steps
-                color_steps[i] = Color(int(dr), int(dg), int(db))
+                color_steps[i] = (dr, dg, db)
 
                 print(f"LED {i}: target color = ({r}, {g}, {b}), color steps = ({dr}, {dg}, {db})")
 
             # Move the color one step closer to the target color
-            colors[i] = Color(
-                min(max(int(colors[i].r + color_steps[i].r), 0), 255),
-                min(max(int(colors[i].g + color_steps[i].g), 0), 255),
-                min(max(int(colors[i].b + color_steps[i].b), 0), 255)
-            )
+            r = min(max(colors[i].r + color_steps[i][0], 0), 255)
+            g = min(max(colors[i].g + color_steps[i][1], 0), 255)
+            b = min(max(colors[i].b + color_steps[i][2], 0), 255)
+            colors[i] = Color(int(r), int(g), int(b))
 
             print(f"LED {i}: current color = ({colors[i].r}, {colors[i].g}, {colors[i].b})")
 
