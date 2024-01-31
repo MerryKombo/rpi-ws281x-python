@@ -25,8 +25,8 @@ def torch_effect3(strip, flame_min, flame_max):
     while True:
         for i in range(strip.numPixels()):
             r = random.randint(flame_min, flame_max)
-            g = min(max(int(r * 0.8), 0), 255)  # Green component is 80% of red component
-            b = min(max(int(r * 0.2), 0), 255)  # Blue component is 20% of red component
+            g = min(max(int(r * 0.6), 0), 255)  # Green component is 60% of red component
+            b = min(max(int(r * 0.1), 0), 255)  # Blue component is 10% of red component
             strip.setPixelColor(i, Color(r, g, b))
         strip.show()
         time.sleep(0.1)  # Adjust for desired flickering speed
