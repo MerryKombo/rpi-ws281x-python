@@ -41,12 +41,16 @@ def torch_effect4(strip, flame_min, flame_max, steps=10):
                 db = (b - colors[i].b) / steps
                 color_steps[i] = Color(int(dr), int(dg), int(db))
 
+                print(f"LED {i}: target color = ({r}, {g}, {b}), color steps = ({dr}, {dg}, {db})")
+
             # Move the color one step closer to the target color
             colors[i] = Color(
                 min(max(int(colors[i].r + color_steps[i].r), 0), 255),
                 min(max(int(colors[i].g + color_steps[i].g), 0), 255),
                 min(max(int(colors[i].b + color_steps[i].b), 0), 255)
             )
+
+            print(f"LED {i}: current color = ({colors[i].r}, {colors[i].g}, {colors[i].b})")
 
             # Set the color of the LED
             strip.setPixelColor(i, colors[i])
