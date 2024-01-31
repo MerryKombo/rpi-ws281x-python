@@ -2,9 +2,13 @@
 # This script will print the 1-minute load average and the corresponding color every 5 seconds.
 # The color is determined by looking up the load in the "colors" array.
 # The load is multiplied by 10 to get the index in the array, and the min function is used to ensure that the index does not exceed the length of the array.
+# The send_request function sends a POST request to the /light endpoint of the server with a JSON body containing the board name and color.
+# Please note that you need to install the requests library using pip:
+# ./bin/pip install requests
 
 import os
 import time
+import requests
 import matplotlib.cm as cm
 import numpy as np
 
@@ -32,6 +36,11 @@ colors = [cmap(point) for point in points]
 # Convert colors to 8-bit RGB values
 colors = [(int(r*255), int(g*255), int(b*255)) for r, g, b, _ in colors]
 
+def send_color_to_server(board_name, color):
+    url = 'http://your_server_ip_address:5000/light'
+    data = {'board_name': board_name, 'color': color}
+    response = requests.post(url, json=data)
+    print(f'Response from server: {response.text}')
 
 while True:
     # Get the 1-minute load average
@@ -45,6 +54,9 @@ while True:
 
     # Print the load and the corresponding color
     print(f"1 minute load: {load_1}, color: {color}")
+
+    # Send the color to the server
+    send_color_to_server('your_board_name', color)
 
     # Wait for a bit before the next iteration
     time.sleep(5)
