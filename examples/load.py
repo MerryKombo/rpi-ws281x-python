@@ -28,8 +28,9 @@ print(f"15 minute load: {load_15}")
 points = np.linspace(0, 1, 40)
 
 # Use the RdYlGn (Red-Yellow-Green) reversed colormap
-cmap = cm.get_cmap('RdYlGn_r')
-
+# cmap = cm.get_cmap('RdYlGn_r')
+# Use the RdBu (Red-Blue) colormap
+cmap = cm.get_cmap('RdBu')
 # Generate the colors
 colors = [cmap(point) for point in points]
 
