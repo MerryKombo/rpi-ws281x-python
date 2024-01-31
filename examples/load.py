@@ -37,7 +37,7 @@ colors = [cmap(point) for point in points]
 colors = [(int(r*255), int(g*255), int(b*255)) for r, g, b, _ in colors]
 
 def send_color_to_server(board_name, color):
-    url = 'http://your_server_ip_address:5000/light'
+    url = 'http://goun-3bplus-1.local:5000/light'
     data = {'board_name': board_name, 'color': color}
     response = requests.post(url, json=data)
     print(f'Response from server: {response.text}')
