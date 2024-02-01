@@ -58,6 +58,8 @@ python3 -m venv .
 
 ## Systemd
 
+### Light server
+
 Create a new service file in `/etc/systemd/system/` with a `.service` extension.
 For example, you could name it `light_server.service`. As for the content, have a look at the `light_server.service` file in this repository.
 Now, you need to reload the systemd manager configuration with the following command:
@@ -81,4 +83,31 @@ This should show that your service is active and running.
 Stop the service:
 ```bash
 sudo systemctl stop light_server.service
+```
+
+### Load client
+
+Create a new service file in `/etc/systemd/system/` with a `.service` extension.
+For example, you could name it `load_client.service`. As for the content, have a look at the `load_client.service` file in this repository.
+Now, you need to reload the systemd manager configuration with the following command:
+```bash
+sudo systemctl daemon-reload
+```
+Enable the service to start at boot time:
+```bash
+sudo systemctl enable load_client.service
+```
+Start the service:
+```bash
+sudo systemctl start load_client.service
+```
+Check the status of the service:
+```bash
+sudo systemctl status load_client.service
+```
+This should show that your service is active and running.
+
+Stop the service:
+```bash
+sudo systemctl stop load_client.service
 ```
