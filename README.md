@@ -12,6 +12,8 @@ python3 -m venv .
 ./bin/pip install pigpio
 ./bin/pip3 install lgpio RPi.GPIO
 ./bin/pip3 install --upgrade lgpio
+./bin/pip3 install requests
+./bin/pip3 install matplotlib
 ```
 
 ## LED
@@ -106,6 +108,11 @@ Check the status of the service:
 sudo systemctl status load_client.service
 ```
 This should show that your service is active and running.
+
+If in trouble, launch this command to get detailed logs:
+```bash
+sudo journalctl -u load_client -f &
+```
 
 Stop the service:
 ```bash
