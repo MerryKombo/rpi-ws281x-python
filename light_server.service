@@ -1,0 +1,14 @@
+[Unit]
+Description=Light Server
+After=network.target
+
+[Service]
+ExecStart=/home/poddingue/rpi-ws281x-python/bin/python3 /home/poddingue/rpi-ws281x-python/examples/light-server.py
+WorkingDirectory=/home/poddingue/rpi-ws281x-python/examples
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=poddingue
+
+[Install]
+WantedBy=multi-user.target
