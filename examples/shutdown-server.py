@@ -14,9 +14,14 @@ def start_server():
                 data = conn.recv(1024)
                 if not data:
                     break
-                elif data.decode('utf-8') == 'shutdown':
+                command = data.decode('utf-8')
+                if command == 'shutdown':
                     print('Shutdown signal received. Shutting down...')
                     # Insert your shutdown command here
+                    break
+                elif command == 'reboot':
+                    print('Reboot signal received. Rebooting...')
+                    # Insert your reboot command here
                     break
 
 if __name__ == '__main__':
