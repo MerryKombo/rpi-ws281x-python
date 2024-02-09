@@ -1,0 +1,14 @@
+[Unit]
+Description=My Python Shutdown Server
+After=network.target
+
+[Service]
+ExecStart=/home/poddingue/rpi-ws281x-python/bin/python3 /home/poddingue/rpi-ws281x-python/examples/shutdown-server.py
+WorkingDirectory=/home/poddingue/rpi-ws281x-python
+Restart=always
+User=root
+Group=root
+Environment="PATH=/usr/bin:/bin"
+
+[Install]
+WantedBy=multi-user.target

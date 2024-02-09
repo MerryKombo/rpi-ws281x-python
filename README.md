@@ -123,3 +123,24 @@ Stop the service:
 ```bash
 sudo systemctl stop load_client.service
 ```
+
+### Shutdown Server
+
+The shutdown server can be run as a systemd service. Here are the steps to create and enable the service:
+
+1. Create a new file in `/etc/systemd/system/` named `shutdown-server.service`. The content of the file should be as what you'll find in the `shutdown-server.service` file in this repository.
+2. Reload the systemd manager configuration with `sudo systemctl daemon-reload`.  
+3. Enable the service to start on boot with `sudo systemctl enable shutdown-server`.  
+4. Start the service with `sudo systemctl start shutdown-server`.  
+
+You can check the status of your service with `sudo systemctl status shutdown-server`.  
+
+### Shutdown Client
+
+Open a terminal.  
+Navigate to the directory where `shutdown-client.py` is located using the `cd` command.
+For example:
+`cd /home/poddingue/rpi-ws281x-python/`
+Run the script with Python. If you want to send a 'reboot' command, you can run the script without any arguments. If you want to send a 'shutdown' command, you can provide any argument:
+`./bin/python3 examples/shutdown-client.py` or
+`./bin/python3 examples/shutdown-client.py shutdown`.
