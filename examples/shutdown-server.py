@@ -1,4 +1,5 @@
 import socket
+import os
 
 def start_server():
     host = 'localhost'  # replace with the IP address of the board
@@ -17,11 +18,11 @@ def start_server():
                 command = data.decode('utf-8')
                 if command == 'shutdown':
                     print('Shutdown signal received. Shutting down...')
-                    # Insert your shutdown command here
+                    os.system('sudo shutdown -h now')
                     break
                 elif command == 'reboot':
                     print('Reboot signal received. Rebooting...')
-                    # Insert your reboot command here
+                    os.system('sudo reboot')
                     break
 
 if __name__ == '__main__':
