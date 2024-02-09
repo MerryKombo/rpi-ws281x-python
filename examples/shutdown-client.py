@@ -1,4 +1,5 @@
 import socket
+import sys
 
 def send_command(command):
     host = 'localhost'  # replace with the IP address of the board
@@ -9,5 +10,6 @@ def send_command(command):
         s.sendall(command.encode('utf-8'))
 
 if __name__ == '__main__':
-    # send 'shutdown' or 'reboot' based on your needs
-    send_command('shutdown')
+    # send 'reboot' by default, 'shutdown' if an argument is provided
+    command = 'shutdown' if len(sys.argv) > 1 else 'reboot'
+    send_command(command)
