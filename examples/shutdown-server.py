@@ -20,7 +20,7 @@ def send_command(command, host):
 def start_server():
     host = 'localhost'  # replace with the IP address of the board
     port = 12345  # choose an appropriate port
-    master_host = 'master'  # replace with the hostname of the master
+    master_host = 'goun-3bplus-1'  # replace with the hostname of the master
     host_file = 'hosts.txt'  # replace with the path to your file of hostnames
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
