@@ -91,6 +91,11 @@ sudo systemctl stop light_server.service
 
 Create a new service file in `/etc/systemd/system/` with a `.service` extension.
 For example, you could name it `load_client.service`. As for the content, have a look at the `load_client.service` file in this repository.
+
+```bash
+sudoedit /etc/systemd/system/load_client.service
+```
+
 Now, you need to reload the systemd manager configuration with the following command:
 ```bash
 sudo systemctl daemon-reload
