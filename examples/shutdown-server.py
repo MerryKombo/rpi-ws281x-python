@@ -18,12 +18,16 @@ def generate_host_file(filename):
     Returns:
     None
     """
-    arp_output = os.popen('/usr/sbin/arp -a').read()
-    ip_addresses = re.findall(r'\((.*?)\)', arp_output)
+    # Replace '192.168.1.0/24' with your network range
+    nmap_output = os.popen('nmap -sn 192.168.1.0/24').read()
+    ip_addresses = re.findall(r'Nmap scan report for (.*?)\n', nmap_output)
 
     with open(filename, 'w') as file:
         for ip in ip_addresses:
             file.write(ip + '\n')
+
+if __name__ == '__main__':
+    generate_host_file('hosts.txt')
 
 def send_command_to_all(command, host_file):
     """
