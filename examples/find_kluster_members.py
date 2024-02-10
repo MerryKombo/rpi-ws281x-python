@@ -30,7 +30,7 @@ def generate_host_file_with_nmap(filename):
     None
     """
     # Replace '192.168.1.0/24' with your network range
-    nmap_output = os.popen('nmap -sn 192.168.1.0/24').read()
+    nmap_output = os.popen('/usr/bin/nmap -sn 192.168.1.0/24').read()
     ip_addresses = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', nmap_output)
 
     with open(filename, 'w') as file:
