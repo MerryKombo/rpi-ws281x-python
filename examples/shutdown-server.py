@@ -68,7 +68,7 @@ def start_server():
     Returns:
     None
     """
-    host = 'localhost'  # replace with the IP address of the board
+    host = '0.0.0.0'  # replace with the IP address of the board
     port = 12345  # choose an appropriate port
     master_host = 'goun-3bplus-1'  # replace with the hostname of the master
     host_file = 'hosts.txt'  # replace with the path to your file of hostnames
