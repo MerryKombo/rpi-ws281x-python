@@ -2,8 +2,39 @@ import socket
 import os
 import sys
 import socket
+import re
+
+def generate_host_file(filename):
+    """
+    This function generates a host file containing IP addresses.
+
+    Parameters:
+    filename (str): The name of the file to be generated.
+
+    Returns:
+    None
+    """
+    arp_output = os.popen('arp -a').read()
+    ip_addresses = re.findall(r'\((.*?)\)', arp_output)
+
+    with open(filename, 'w') as file:
+        for ip in ip_addresses:
+            file.write(ip + '\n')
 
 def send_command_to_all(command, host_file):
+    """
+    This function sends a command to all hosts listed in the host file.
+
+    Parameters:
+    command (str): The command to be sent.
+    host_file (str): The file containing the list of hosts.
+
+    Returns:
+    None
+    """
+    # Generate the host file before reading it
+    generate_host_file(host_file)
+
     with open(host_file, 'r') as file:
         hosts = file.read().splitlines()
 
@@ -11,6 +42,16 @@ def send_command_to_all(command, host_file):
         send_command(command, host)
 
 def send_command(command, host):
+    """
+    This function sends a command to a specific host.
+
+    Parameters:
+    command (str): The command to be sent.
+    host (str): The host to send the command to.
+
+    Returns:
+    None
+    """
     port = 12345  # must be the same as in the server script
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -18,6 +59,12 @@ def send_command(command, host):
         s.sendall(command.encode('utf-8'))
 
 def start_server():
+    """
+    This function starts a server that listens for commands and performs actions based on the received commands.
+
+    Returns:
+    None
+    """
     host = 'localhost'  # replace with the IP address of the board
     port = 12345  # choose an appropriate port
     master_host = 'goun-3bplus-1'  # replace with the hostname of the master
