@@ -70,7 +70,7 @@ def send_command_to_all(command, host_file):
 
         for future in concurrent.futures.as_completed(futures):
             host = hosts[futures.index(future)]
-            logging.info(f"Submitting future for host: {host}")
+            logging.info(f"Attempting to send command to host: {host}")
             try:
                 # If the function returned without raising an exception
                 # future.result() will return the return value of the function
