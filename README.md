@@ -132,6 +132,7 @@ The shutdown server can be run as a systemd service. Here are the steps to creat
 2. Reload the systemd manager configuration with `sudo systemctl daemon-reload`.  
 3. Enable the service to start on boot with `sudo systemctl enable shutdown-server`.  
 4. Start the service with `sudo systemctl start shutdown-server`.  
+5. Install net-tools using the package manager of your system. `sudo apt-get install net-tools`
 
 You can check the status of your service with `sudo systemctl status shutdown-server`.  
 
