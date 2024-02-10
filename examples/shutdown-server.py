@@ -4,6 +4,8 @@ import socket
 import re
 import logging
 import sys
+import concurrent.futures
+import socket
 sys.path.insert(0, '/home/poddingue/rpi-ws281x-python/examplesimport')
 import find_kluster_members
 from find_kluster_members import generate_host_file_with_nmap as generate_host_file
@@ -14,7 +16,6 @@ logging.basicConfig(level=logging.INFO)
 if __name__ == '__main__':
     generate_host_file('hosts.txt')
 
-import concurrent.futures
 
 def send_command_to_all(command, host_file):
     """
@@ -30,13 +31,16 @@ def send_command_to_all(command, host_file):
     # Generate the host file before reading it
     generate_host_file(host_file)
 
+    # Get the IP of the current machine
+    current_ip = socket.gethostbyname(socket.gethostname())
+
     with open(host_file, 'r') as file:
         hosts = file.read().splitlines()
 
     # Create a ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Use a list comprehension to create a list of futures
-        futures = [executor.submit(send_command, command, host) for host in hosts]
+        futures = [executor.submit(send_command, command, host) for host in hosts if host != current_ip]
 
         for future in concurrent.futures.as_completed(futures):
             host = hosts[futures.index(future)]
