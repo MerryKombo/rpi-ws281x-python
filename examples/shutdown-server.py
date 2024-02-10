@@ -14,6 +14,8 @@ logging.basicConfig(level=logging.INFO)
 if __name__ == '__main__':
     generate_host_file('hosts.txt')
 
+import concurrent.futures
+
 def send_command_to_all(command, host_file):
     """
     This function sends a command to all hosts listed in the host file.
@@ -31,13 +33,20 @@ def send_command_to_all(command, host_file):
     with open(host_file, 'r') as file:
         hosts = file.read().splitlines()
 
-    for host in hosts:
-        logging.info(f"Sending command to host: {host}")
-        try:
-            send_command(command, host)
-            logging.info(f"Command sent successfully to host: {host}")
-        except Exception as e:
-            logging.error(f"Failed to send command to host: {host}. Error: {e}")
+    # Create a ThreadPoolExecutor
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        # Use a list comprehension to create a list of futures
+        futures = [executor.submit(send_command, command, host) for host in hosts]
+
+        for future in concurrent.futures.as_completed(futures):
+            host = hosts[futures.index(future)]
+            try:
+                # If the function returned without raising an exception
+                # future.result() will return the return value of the function
+                future.result()
+                logging.info(f"Command sent successfully to host: {host}")
+            except Exception as e:
+                logging.error(f"Failed to send command to host: {host}. Error: {e}")
 
 def send_command(command, host):
     """
