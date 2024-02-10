@@ -3,6 +3,10 @@ import os
 import sys
 import socket
 import re
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
 
 def generate_host_file(filename):
     """
@@ -39,7 +43,12 @@ def send_command_to_all(command, host_file):
         hosts = file.read().splitlines()
 
     for host in hosts:
-        send_command(command, host)
+        logging.info(f"Sending command to host: {host}")
+        try:
+            send_command(command, host)
+            logging.info(f"Command sent successfully to host: {host}")
+        except Exception as e:
+            logging.error(f"Failed to send command to host: {host}. Error: {e}")
 
 def send_command(command, host):
     """
