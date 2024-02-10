@@ -1,30 +1,12 @@
-import socket
 import os
 import sys
 import socket
 import re
 import logging
+from find_kluster_members import generate_host_file
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
-
-def generate_host_file(filename):
-    """
-    This function generates a host file containing IP addresses.
-
-    Parameters:
-    filename (str): The name of the file to be generated.
-
-    Returns:
-    None
-    """
-    # Replace '192.168.1.0/24' with your network range
-    nmap_output = os.popen('nmap -sn 192.168.1.0/24').read()
-    ip_addresses = re.findall(r'Nmap scan report for (.*?)\n', nmap_output)
-
-    with open(filename, 'w') as file:
-        for ip in ip_addresses:
-            file.write(ip + '\n')
 
 if __name__ == '__main__':
     generate_host_file('hosts.txt')

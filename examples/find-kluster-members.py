@@ -13,7 +13,7 @@ def generate_host_file_with_arp(filename):
     None
     """
     arp_output = os.popen('arp -a').read()
-    ip_addresses = re.findall(r'\((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\)', arp_output)
+    ip_addresses = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', arp_output)
 
     with open(filename, 'w') as file:
         for ip in ip_addresses:
@@ -31,7 +31,7 @@ def generate_host_file_with_nmap(filename):
     """
     # Replace '192.168.1.0/24' with your network range
     nmap_output = os.popen('nmap -sn 192.168.1.0/24').read()
-    ip_addresses = re.findall(r'\((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\)', nmap_output)
+    ip_addresses = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', nmap_output)
 
     with open(filename, 'w') as file:
         for ip in ip_addresses:
