@@ -18,7 +18,7 @@ def generate_host_file(filename):
     Returns:
     None
     """
-    arp_output = os.popen('arp -a').read()
+    arp_output = os.popen('/usr/sbin/arp -a').read()
     ip_addresses = re.findall(r'\((.*?)\)', arp_output)
 
     with open(filename, 'w') as file:
