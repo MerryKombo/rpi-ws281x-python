@@ -17,6 +17,30 @@ if __name__ == '__main__':
     generate_host_file('hosts.txt')
 
 
+def send_command(command, host):
+    """
+    This function sends a command to a specific host.
+
+    Parameters:
+    command (str): The command to be sent.
+    host (str): The host to send the command to.
+
+    Returns:
+    None
+    """
+    port = 12345  # must be the same as in the server script
+
+    logging.info(f"Attempting to send command to host: {host}")
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(20)  # set timeout to 20 seconds
+        try:
+            s.connect((host, port))
+            if socket.gethostname() == "goun-3bplus-1":
+                s.sendall(command.encode('utf-8'))
+        except socket.timeout:
+            logging.error(f"Connection to host: {host} timed out.")
+
 def send_command_to_all(command, host_file):
     """
     This function sends a command to all hosts listed in the host file.
@@ -46,6 +70,7 @@ def send_command_to_all(command, host_file):
 
         for future in concurrent.futures.as_completed(futures):
             host = hosts[futures.index(future)]
+            logging.info(f"Submitting future for host: {host}")
             try:
                 # If the function returned without raising an exception
                 # future.result() will return the return value of the function
@@ -53,28 +78,6 @@ def send_command_to_all(command, host_file):
                 logging.info(f"Command sent successfully to host: {host}")
             except Exception as e:
                 logging.error(f"Failed to send command to host: {host}. Error: {e}")
-
-def send_command(command, host):
-    """
-    This function sends a command to a specific host.
-
-    Parameters:
-    command (str): The command to be sent.
-    host (str): The host to send the command to.
-
-    Returns:
-    None
-    """
-    port = 12345  # must be the same as in the server script
-
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.settimeout(20)  # set timeout to 20 seconds
-        try:
-            s.connect((host, port))
-            if socket.gethostname() == "goun-3bplus-1":
-                s.sendall(command.encode('utf-8'))
-        except socket.timeout:
-            logging.error(f"Connection to host: {host} timed out.")
 
 def start_server():
     """
