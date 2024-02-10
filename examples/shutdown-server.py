@@ -6,7 +6,7 @@ import logging
 import sys
 sys.path.insert(0, '/home/poddingue/rpi-ws281x-python/examplesimport')
 import find_kluster_members
-from find_kluster_members import generate_host_file
+from find_kluster_members import generate_host_file_with_nmap as generate_host_file
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
