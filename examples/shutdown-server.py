@@ -4,7 +4,7 @@ import socket
 import re
 import logging
 import sys
-sys.path.insert(0, '/home/poddingue/rpi-ws281x-python/examplesimport find_kluster_members')
+sys.path.insert(0, '/home/poddingue/rpi-ws281x-python/examplesimport')
 import find_kluster_members
 from find_kluster_members import generate_host_file
 
