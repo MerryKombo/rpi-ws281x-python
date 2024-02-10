@@ -32,7 +32,9 @@ def send_command_to_all(command, host_file):
     generate_host_file(host_file)
 
     # Get the IP of the current machine
-    current_ip = socket.gethostbyname(socket.gethostname())
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        s.connect(("8.8.8.8", 80))  # Google's DNS server
+        current_ip = s.getsockname()[0]
 
     with open(host_file, 'r') as file:
         hosts = file.read().splitlines()
