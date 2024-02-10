@@ -53,8 +53,12 @@ def send_command(command, host):
     port = 12345  # must be the same as in the server script
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((host, port))
-        s.sendall(command.encode('utf-8'))
+        s.settimeout(20)  # set timeout to 20 seconds
+        try:
+            s.connect((host, port))
+            s.sendall(command.encode('utf-8'))
+        except socket.timeout:
+            logging.error(f"Connection to host: {host} timed out.")
 
 def start_server():
     """
