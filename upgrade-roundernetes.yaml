@@ -1,7 +1,7 @@
 ---
 - name: Upgrade all Debian Bookworm machines
   hosts: all
-  gather_facts: yes
+  gather_facts: no
   tasks:
     - name: Check if the machine is running Debian Bookworm
       shell: cat /etc/os-release | grep 'VERSION_CODENAME=bookworm'
