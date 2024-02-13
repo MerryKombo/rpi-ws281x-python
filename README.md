@@ -145,3 +145,23 @@ For example:
 Run the script with Python. If you want to send a 'reboot' command, you can run the script without any arguments. If you want to send a 'shutdown' command, you can provide any argument:
 `./bin/python3 examples/shutdown-client.py` or
 `./bin/python3 examples/shutdown-client.py shutdown`.
+
+## Ansible
+
+We use Ansible to automate the setup and configuration of our project. Here are the steps we've taken recently:
+
+1. We've created an inventory file (`inventory.ini`) that specifies the hosts we want to manage with Ansible. Here's what it looks like:
+
+```ini
+[pis]
+192.168.1.28 ansible_python_interpreter=/usr/bin/python3
+```
+
+2. We've encountered an issue where Ansible was unable to find the Python interpreter on the remote host. We resolved this by creating a symbolic link between python and python3 on the remote host:
+`sudo ln -s /usr/bin/python3 /usr/bin/python`
+3. We've also encountered an issue where the Python setuptools package was not installed on the remote host. We resolved this by installing setuptools using the pip package manager:
+`python3 -m pip install setuptools`
+4. If the pip package manager is not installed on your system, you can install it using the package manager of your operating system. On a Debian-based system like Ubuntu, you can use the apt package manager to install pip for Python 3:
+`sudo apt update
+sudo apt install python3-pip`
+5. Please note that these commands need to be run on the remote host where you are trying to execute the Ansible playbook.
