@@ -1,0 +1,16 @@
+---
+- name: Upgrade all Debian Bookworm machines
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Check if the machine is running Debian Bookworm
+      shell: cat /etc/os-release | grep 'VERSION_CODENAME=bookworm'
+      register: os_version
+      changed_when: false
+
+    - name: Upgrade packages
+      apt:
+        upgrade: dist
+        update_cache: yes
+      become: yes
+      when: os_version.stdout != ""
