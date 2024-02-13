@@ -1,0 +1,71 @@
+---
+- hosts: pis
+  gather_facts: no
+  become: yes
+  remote_user: poddingue
+  vars:
+    ansible_ssh_private_key_file: ~/.ssh/roundernetes
+  tasks:
+    - name: Install packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - bind9-dnsutils
+        - net-tools
+        - avahi-utils
+
+    - name: Copy light_server.service file
+      copy:
+        src: light_server.service
+        dest: /etc/systemd/system/light_server.service
+
+    - name: Enable and start light_server.service
+      systemd:
+        name: light_server.service
+        state: started
+        enabled: yes
+
+    - name: Copy load_client.service file
+      copy:
+        src: load_client.service
+        dest: /etc/systemd/system/load_client.service
+
+    - name: Enable and start load_client.service
+      systemd:
+        name: load_client.service
+        state: started
+        enabled: yes
+
+    - name: Copy shutdown-server.service file
+      copy:
+        src: shutdown-server.service
+        dest: /etc/systemd/system/shutdown-server.service
+
+    - name: Enable and start shutdown-server.service
+      systemd:
+        name: shutdown-server.service
+        state: started
+        enabled: yes
+
+    - name: Clone the repository
+      git:
+        repo: 'https://github.com/MerryKombo/rpi-ws281x-python.git'
+        dest: '/home/poddingue/rpi-ws281x-python'
+        clone: yes
+        update: yes
+
+    - name: Run Python commands in the cloned repository
+      shell: "{{ item }}"
+      args:
+        chdir: /home/poddingue/rpi-ws281x-python
+      loop:
+        - python3 -m venv .
+        - ./bin/pip install rpi_ws281x
+        - ./bin/pip install gpiozero
+        - ./bin/pip install pigpio
+        - ./bin/pip3 install lgpio RPi.GPIO
+        - ./bin/pip3 install --upgrade lgpio
+        - ./bin/pip3 install requests
+        - ./bin/pip3 install matplotlib
+...
