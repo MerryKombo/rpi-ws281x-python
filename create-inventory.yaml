@@ -9,6 +9,9 @@
     inventory_file: /home/poddingue/generated-inventory.ini
     log_file: /home/poddingue/generated-inventory.log
   tasks:
+    - name: Clear inventory file
+      shell: ssh -i {{ ssh_key_path }} {{ username }}@{{ known_ip }} "echo '' > {{ inventory_file }}"
+
     - name: Create and clear log file
       shell: ssh -i {{ ssh_key_path }} {{ username }}@{{ known_ip }} "touch {{ log_file }} && > {{ log_file }}"
 
