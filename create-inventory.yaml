@@ -1,0 +1,42 @@
+---
+- name: Create inventory
+  hosts: localhost
+  gather_facts: no
+  vars:
+    known_ip: 192.168.1.142
+    ssh_key_path: /home/poddingue/.ssh/roundernetes.pub
+    username: poddingue
+    inventory_file: /home/poddingue/generated-inventory.ini
+    log_file: /home/poddingue/generated-inventory.log
+  tasks:
+    - name: Create and clear log file
+      shell: ssh -i {{ ssh_key_path }} {{ username }}@{{ known_ip }} "touch {{ log_file }} && > {{ log_file }}"
+
+    - name: Get network mask
+      shell: ssh -i {{ ssh_key_path }} {{ username }}@{{ known_ip }} "bash -c '/usr/sbin/ip -o -f inet addr show | awk \"/192.168.1.142/ {print \$4}\" | cut -d'/' -f2 | head -n 1'"
+      register: network_mask
+
+    - name: Check if network mask is set
+      fail:
+        msg: "Error: NETWORK_MASK is not set. Please check the network configuration of the remote machine."
+      when: network_mask.stdout == ""
+
+    - name: Get IP list
+      shell: ssh -i {{ ssh_key_path }} {{ username }}@{{ known_ip }} "nmap -sn 192.168.1.0/{{ network_mask.stdout }} -oG - | awk '/Up$/{print \$2}'"
+      register: ip_list
+
+    - name: Check if IP list is set
+      fail:
+        msg: "Error: IP_LIST is not set. Please check the network configuration of the remote machine."
+      when: ip_list.stdout == ""
+
+    - name: Add IPs to inventory file
+      shell: ssh -i {{ ssh_key_path }} -o BatchMode=yes -o ConnectTimeout=5 {{ username }}@{{ item }} echo && ssh -i {{ ssh_key_path }} {{ username }}@{{ known_ip }} "echo '{{ item }} ansible_python_interpreter=/usr/bin/python3' >> {{ inventory_file }}"
+      with_items: "{{ ip_list.stdout_lines }}"
+      ignore_errors: true
+
+    - name: Copy inventory file to local machine
+      shell: scp -i {{ ssh_key_path }} {{ username }}@{{ known_ip }}:{{ inventory_file }} .
+
+    - name: Copy log file to local machine
+      shell: scp -i {{ ssh_key_path }} {{ username }}@{{ known_ip }}:{{ log_file }} .

@@ -1,6 +1,7 @@
 ---
 - name: Shutdown all machines
   hosts: all
+  gather_facts: no
   tasks:
     - name: Shutdown
       command: /sbin/shutdown -h now

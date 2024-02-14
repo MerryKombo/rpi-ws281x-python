@@ -148,6 +148,7 @@ Run the script with Python. If you want to send a 'reboot' command, you can run 
 
 ## Ansible
 
+`ssh-copy-id -i ~/.ssh/roundernetes.pub poddingue@192.168.1.137`
 We use Ansible to automate the setup and configuration of our project. Here are the steps we've taken recently:
 
 1. We've created an inventory file (`inventory.ini`) that specifies the hosts we want to manage with Ansible. Here's what it looks like:
