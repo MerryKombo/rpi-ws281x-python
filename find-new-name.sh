@@ -31,7 +31,7 @@ for ip in $ssh_machines; do
     ssh-keygen -R $ip
 
     # Attempt to log in to the machine with the roundernetes key
-    if ssh -o BatchMode=yes -o ConnectTimeout=5 -i ~/.ssh/roundernetes poddingue@$ip exit; then
+    if ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip exit; then
         # If the login is successful, add the machine to the list of accessible machines
         accessible_machines="$accessible_machines $ip"
     fi
