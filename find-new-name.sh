@@ -77,6 +77,10 @@ for ip in $sorted_ips; do
         # If the hostname is already in the file, update the existing entry
         sudo sed -i "/$hostname/d" /etc/hosts
     fi
-    # Add the new entry
-    echo "$ip $hostname" | sudo tee -a /etc/hosts
+    if grep -q "$hostname.local" /etc/hosts; then
+        # If the hostname.local is already in the file, update the existing entry
+        sudo sed -i "/$hostname.local/d" /etc/hosts
+    fi
+    # Add the new entry with both "machine name" and "machine name.local"
+    echo "$ip $hostname $hostname.local" | sudo tee -a /etc/hosts
 done
