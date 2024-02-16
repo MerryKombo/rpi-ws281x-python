@@ -80,7 +80,7 @@ sorted_ips=$(echo "${!ip_hostname_map[@]}" | tr ' ' '\n' | sort -n -t . -k 1,1 -
 # Update the /etc/hosts file
 for ip in $sorted_ips; do
     hostname=${ip_hostname_map[$ip]}
-    if [[ $hostname != "$current_hostname" ]]; then
+    if [[ $hostname != $current_hostname ]]; then
         if grep -q $hostname /etc/hosts; then
             # If the hostname is already in the file, update the existing entry
             sudo sed -i "/$hostname/d" /etc/hosts
