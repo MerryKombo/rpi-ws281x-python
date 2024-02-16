@@ -81,6 +81,12 @@ for ip in $sorted_ips; do
         # If the hostname.local is already in the file, update the existing entry
         sudo sed -i "/$hostname.local/d" /etc/hosts
     fi
-    # Add the new entry with both "machine name" and "machine name.local"
-    echo "$ip $hostname $hostname.local" | sudo tee -a /etc/hosts
+    # Check if hostname already ends with .local
+    if [[ $hostname == *.local ]]; then
+        # If it does, add the new entry with only "machine name"
+        echo "$ip $hostname" | sudo tee -a /etc/hosts
+    else
+        # If it doesn't, add the new entry with both "machine name" and "machine name.local"
+        echo "$ip $hostname $hostname.local" | sudo tee -a /etc/hosts
+    fi
 done
