@@ -1,4 +1,5 @@
 #!/bin/sh
+set +x
 
 # Default values
 owner="goun"
