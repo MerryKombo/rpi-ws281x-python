@@ -92,10 +92,6 @@ for ip in $sorted_ips; do
     else
         # If the hostname is the current hostname, remove all existing entries
         sudo sed -i "/$hostname/d" /etc/hosts
-        # Add 'localhost' to the current hostname line if it's not already present
-        if [[ $hostname != localhost* ]]; then
-            hostname="localhost $hostname"
-        fi
     fi
     # Check if hostname already ends with .local
     if [[ $hostname == *.local ]]; then
@@ -105,6 +101,8 @@ for ip in $sorted_ips; do
         # If it doesn't, add the new entry with both "machine name" and "machine name.local"
         echo "$ip $hostname $hostname.local" | sudo tee -a /etc/hosts
     fi
+    # Append 'localhost' to lines that contain the current hostname but not 'localhost'
+    sudo sed -i "/$current_hostname/ {/localhost/ !s/$/ localhost/}" /etc/hosts
 done
 
 # Generate the new name
