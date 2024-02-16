@@ -24,7 +24,20 @@ ssh_machines=$(find_ssh_machines)
 # Print the value of ssh_machines for debugging
 echo "SSH machines: $ssh_machines"
 
+accessible_machines=""
+
 for ip in $ssh_machines; do
+    # Attempt to log in to the machine with the roundernetes key
+    if ssh -o BatchMode=yes -o ConnectTimeout=5 -i ~/.ssh/roundernetes poddingue@$ip exit; then
+        # If the login is successful, add the machine to the list of accessible machines
+        accessible_machines="$accessible_machines $ip"
+    fi
+done
+
+# Print the value of accessible_machines for debugging
+echo "Accessible machines: $accessible_machines"
+
+for ip in $accessible_machines; do
     # Use avahi-resolve to get the hostname for the IP address
     hostname=$(avahi-resolve -4 -a $ip | awk '{print $2}')
 
