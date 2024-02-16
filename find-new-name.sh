@@ -66,9 +66,6 @@ for ip in $accessible_machines; do
     echo "ssh_hostname: $ssh_hostname, ip: $ip"
 done
 
-# Generate the new name
-echo "${owner}-${type}-3"
-
 # Store the current hostname
 current_hostname=$(hostname)
 
@@ -95,8 +92,10 @@ for ip in $sorted_ips; do
     else
         # If the hostname is the current hostname, remove all existing entries
         sudo sed -i "/$hostname/d" /etc/hosts
-        # Add 'localhost' to the current hostname line
-        hostname="localhost $hostname"
+        # Add 'localhost' to the current hostname line if it's not already present
+        if [[ $hostname != localhost* ]]; then
+            hostname="localhost $hostname"
+        fi
     fi
     # Check if hostname already ends with .local
     if [[ $hostname == *.local ]]; then
@@ -107,3 +106,6 @@ for ip in $sorted_ips; do
         echo "$ip $hostname $hostname.local" | sudo tee -a /etc/hosts
     fi
 done
+
+# Generate the new name
+echo "${owner}-${type}-3"
