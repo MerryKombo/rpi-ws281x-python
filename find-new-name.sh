@@ -130,7 +130,7 @@ for ip in $sorted_ips; do
 done
 
 # Add the [main-pi] section with the current hostname to the inventory file
-echo -e "\n[main-pi]\n$current_hostname ansible_python_interpreter=/usr/bin/python3" >> $INVENTORY_FILE
+echo -e "\n[main-pi]\n$current_ip $current_hostname ansible_python_interpreter=/usr/bin/python3" >> $INVENTORY_FILE
 
 # Generate the new name
 echo "${owner}-${type}-3"
