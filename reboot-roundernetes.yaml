@@ -1,0 +1,8 @@
+---
+- name: Reboot all machines
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Reboot
+      command: /sbin/reboot
+      become: yes
