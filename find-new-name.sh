@@ -114,5 +114,20 @@ for ip in $sorted_ips; do
     sudo sed -i "/$current_hostname/ {/localhost/ !s/$/ localhost/}" /etc/hosts
 done
 
+# Start the inventory file with the [pis] section
+echo "[pis]" > $INVENTORY_FILE
+
+# Add each IP address to the [pis] section
+for ip in $ssh_machines; do
+    # Get the hostname for the IP address
+    hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i $SSH_KEY_PATH "$USERNAME@$ip" hostname)
+
+    # Add the IP address, Python interpreter path, and hostname to the inventory file
+    echo "$ip ansible_python_interpreter=/usr/bin/python3 # $hostname" >> $INVENTORY_FILE
+done
+
+# Add the [main-pi] section with the current hostname to the inventory file
+echo -e "\n[main-pi]\n$current_hostname ansible_python_interpreter=/usr/bin/python3" >> $INVENTORY_FILE
+
 # Generate the new name
 echo "${owner}-${type}-3"
