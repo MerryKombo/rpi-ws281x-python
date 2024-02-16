@@ -62,10 +62,19 @@
         clone: yes
         update: yes
 
+    - name: Change owner of the directory
+      ansible.builtin.file:
+        path: '/home/poddingue/rpi-ws281x-python'
+        owner: 'poddingue'
+        group: 'poddingue'
+        recurse: yes
+
     - name: Run Python commands in the cloned repository
       shell: "{{ item }}"
       args:
         chdir: /home/poddingue/rpi-ws281x-python
+      become: yes
+      become_user: poddingue
       loop:
         - python3 -m venv .
         - ./bin/pip install rpi_ws281x
@@ -76,8 +85,13 @@
         - ./bin/pip3 install requests
         - ./bin/pip3 install matplotlib
 
+    - name: Change script permissions
+      ansible.builtin.file:
+        path: /home/poddingue/rpi-ws281x-python/find-new-name.sh
+        mode: '0755'
+
     - name: Run shell script to get new hostname
-      command: find-new-name.sh
+      command: /home/poddingue/rpi-ws281x-python/find-new-name.sh
       register: new_hostname
 
     - name: Set new hostname
