@@ -54,7 +54,7 @@ for ip in $accessible_machines; do
     ssh_hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip hostname)
 
     # Compare the hostnames
-    if [[ $avahi_hostname != $ssh_hostname ]]; then
+    if [[ $avahi_hostname != "$ssh_hostname" ]]; then
         # If the hostnames are different, log the discrepancy
         echo "Discrepancy for IP $ip: Avahi hostname is $avahi_hostname, but ssh hostname is $ssh_hostname" >> $logfile
     fi
@@ -80,7 +80,7 @@ sorted_ips=$(echo "${!ip_hostname_map[@]}" | tr ' ' '\n' | sort -n -t . -k 1,1 -
 # Update the /etc/hosts file
 for ip in $sorted_ips; do
     hostname=${ip_hostname_map[$ip]}
-    if [[ $hostname != $current_hostname ]]; then
+    if [[ $hostname != "$current_hostname" ]]; then
         if grep -q $hostname /etc/hosts; then
             # If the hostname is already in the file, update the existing entry
             sudo sed -i "/$hostname/d" /etc/hosts
