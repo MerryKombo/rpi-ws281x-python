@@ -43,20 +43,27 @@ done
 # Print the value of accessible_machines for debugging
 echo "Accessible machines: $accessible_machines"
 
+# Create a log file
+logfile="$(pwd)/$0.log"
+
 for ip in $accessible_machines; do
     # Use avahi-resolve to get the hostname for the IP address
-    hostname=$(avahi-resolve -4 -a $ip | awk '{print $2}')
+    avahi_hostname=$(avahi-resolve -4 -a $ip | awk '{print $2}')
 
-    # If avahi-resolve fails, use ssh to get the hostname
-    if [ -z "$hostname" ]; then
-        hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip hostname)
+    # Use ssh to get the hostname
+    ssh_hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip hostname)
+
+    # Compare the hostnames
+    if [[ $avahi_hostname != $ssh_hostname ]]; then
+        # If the hostnames are different, log the discrepancy
+        echo "Discrepancy for IP $ip: Avahi hostname is $avahi_hostname, but ssh hostname is $ssh_hostname" >> $logfile
     fi
 
-    # Add the IP and hostname to the associative array
-    ip_hostname_map[$ip]=$hostname
+    # Add the IP and ssh_hostname to the associative array
+    ip_hostname_map[$ip]=$ssh_hostname
 
-    # Print the values of hostname and ip for debugging
-    echo "hostname: $hostname, ip: $ip"
+    # Print the values of ssh_hostname and ip for debugging
+    echo "ssh_hostname: $ssh_hostname, ip: $ip"
 done
 
 # Generate the new name
