@@ -67,8 +67,11 @@ for ip in $(echo "${!ip_hostname_map[@]}" | tr ' ' '\n' | sort -n -t . -k 1,1 -k
     echo "IP: $ip, Hostname: ${ip_hostname_map[$ip]}"
 done
 
+# Sort the IPs before updating the /etc/hosts file
+sorted_ips=$(echo "${!ip_hostname_map[@]}" | tr ' ' '\n' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4)
+
 # Update the /etc/hosts file
-for ip in "${!ip_hostname_map[@]}"; do
+for ip in $sorted_ips; do
     hostname=${ip_hostname_map[$ip]}
     if grep -q $hostname /etc/hosts; then
         # If the hostname is already in the file, update the existing entry
