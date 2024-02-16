@@ -66,3 +66,14 @@ echo "${owner}-${type}-3"
 for ip in $(echo "${!ip_hostname_map[@]}" | tr ' ' '\n' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4); do
     echo "IP: $ip, Hostname: ${ip_hostname_map[$ip]}"
 done
+
+# Update the /etc/hosts file
+for ip in "${!ip_hostname_map[@]}"; do
+    hostname=${ip_hostname_map[$ip]}
+    if grep -q $hostname /etc/hosts; then
+        # If the hostname is already in the file, update the existing entry
+        sudo sed -i "/$hostname/d" /etc/hosts
+    fi
+    # Add the new entry
+    echo "$ip $hostname" | sudo tee -a /etc/hosts
+done
