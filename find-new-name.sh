@@ -31,7 +31,7 @@ for ip in $ssh_machines; do
     ssh-keygen -R $ip
 
     # Attempt to log in to the machine with the roundernetes key
-    if ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip exit; then
+    if ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip exit; then
         # If the login is successful, add the machine to the list of accessible machines
         accessible_machines="$accessible_machines $ip"
     fi
@@ -46,7 +46,7 @@ for ip in $accessible_machines; do
 
     # If avahi-resolve fails, use ssh to get the hostname
     if [ -z "$hostname" ]; then
-        hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip hostname)
+        hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip hostname)
     fi
 
     # Print the values of hostname and ip for debugging
