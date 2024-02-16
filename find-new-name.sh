@@ -26,12 +26,15 @@ echo "SSH machines: $ssh_machines"
 
 accessible_machines=""
 
+# Declare an associative array
+declare -A ip_hostname_map
+
 for ip in $ssh_machines; do
     # Remove the stored key for the host
     ssh-keygen -R $ip
 
     # Attempt to log in to the machine with the roundernetes key
-    if ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip exit; then
+    if ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip exit; then
         # If the login is successful, add the machine to the list of accessible machines
         accessible_machines="$accessible_machines $ip"
     fi
@@ -46,8 +49,11 @@ for ip in $accessible_machines; do
 
     # If avahi-resolve fails, use ssh to get the hostname
     if [ -z "$hostname" ]; then
-        hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip hostname)
+        hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip hostname)
     fi
+
+    # Add the IP and hostname to the associative array
+    ip_hostname_map[$ip]=$hostname
 
     # Print the values of hostname and ip for debugging
     echo "hostname: $hostname, ip: $ip"
@@ -55,3 +61,8 @@ done
 
 # Generate the new name
 echo "${owner}-${type}-3"
+
+# Print the associative array
+for ip in "${!ip_hostname_map[@]}"; do
+    echo "IP: $ip, Hostname: ${ip_hostname_map[$ip]}"
+done
