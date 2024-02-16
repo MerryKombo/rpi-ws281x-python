@@ -13,6 +13,7 @@
       loop:
         - avahi-utils
         - bind9-dnsutils
+        - ipcalc
         - net-tools
         - python3-dev
         - python3-venv
