@@ -34,7 +34,7 @@ for ip in $ssh_machines; do
     ssh-keygen -R $ip
 
     # Attempt to log in to the machine with the roundernetes key
-    if ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip exit; then
+    if ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes "poddingue@$ip" exit; then
         # If the login is successful, add the machine to the list of accessible machines
         accessible_machines="$accessible_machines $ip"
     fi
@@ -56,7 +56,7 @@ for ip in $accessible_machines; do
     # Compare the hostnames
     if [[ $avahi_hostname != "$ssh_hostname" ]]; then
         # If the hostnames are different, log the discrepancy
-        echo "Discrepancy for IP $ip: Avahi hostname is $avahi_hostname, but ssh hostname is $ssh_hostname" >> $logfile
+        echo "Discrepancy for IP $ip: Avahi hostname is $avahi_hostname, but ssh hostname is $ssh_hostname" >> "$logfile"
     fi
 
     # Add the IP and ssh_hostname to the associative array
@@ -80,8 +80,8 @@ sorted_ips=$(echo "${!ip_hostname_map[@]}" | tr ' ' '\n' | sort -n -t . -k 1,1 -
 # Update the /etc/hosts file
 for ip in $sorted_ips; do
     hostname=${ip_hostname_map[$ip]}
-    if [[ $hostname != $current_hostname ]]; then
-        if grep -q $hostname /etc/hosts; then
+    if [[ $hostname != "$current_hostname" ]]; then
+        if grep -q "$hostname" /etc/hosts; then
             # If the hostname is already in the file, update the existing entry
             sudo sed -i "/$hostname/d" /etc/hosts
         fi
