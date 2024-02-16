@@ -1,0 +1,24 @@
+---
+- hosts: main-pi
+  gather_facts: no
+  become: yes
+  remote_user: poddingue
+  vars:
+    ansible_ssh_private_key_file: ~/.ssh/roundernetes
+  tasks:
+    - name: Change script permissions
+      ansible.builtin.file:
+        path: /home/poddingue/rpi-ws281x-python/find-new-name.sh
+        mode: '0755'
+    - name: Run shell script to get new hostname
+      command: /home/poddingue/rpi-ws281x-python/find-new-name.sh
+      register: new_hostname
+
+    - name: Print new hostname
+      ansible.builtin.debug:
+        var: new_hostname.stdout
+
+    - name: Set new hostname
+      ansible.builtin.hostname:
+        name: "{{ new_hostname.stdout }}"
+...
