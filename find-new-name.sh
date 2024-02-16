@@ -121,7 +121,7 @@ echo "" > $INVENTORY_FILE
 echo "[pis]" > $INVENTORY_FILE
 
 # Add each IP address to the [pis] section
-for ip in $ssh_machines; do
+for ip in $sorted_ips; do
     # Get the hostname for the IP address
     hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i $SSH_KEY_PATH "$USERNAME@$ip" hostname)
 
