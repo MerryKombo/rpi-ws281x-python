@@ -44,6 +44,11 @@ for ip in $accessible_machines; do
     # Use avahi-resolve to get the hostname for the IP address
     hostname=$(avahi-resolve -4 -a $ip | awk '{print $2}')
 
+    # If avahi-resolve fails, use ssh to get the hostname
+    if [ -z "$hostname" ]; then
+        hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i ~/.ssh/roundernetes poddingue@$ip hostname)
+    fi
+
     # Print the values of hostname and ip for debugging
     echo "hostname: $hostname, ip: $ip"
 done
