@@ -62,7 +62,7 @@ done
 # Generate the new name
 echo "${owner}-${type}-3"
 
-# Print the associative array
-for ip in "${!ip_hostname_map[@]}"; do
+# Print the associative array sorted by IP
+for ip in $(echo "${!ip_hostname_map[@]}" | tr ' ' '\n' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4); do
     echo "IP: $ip, Hostname: ${ip_hostname_map[$ip]}"
 done
