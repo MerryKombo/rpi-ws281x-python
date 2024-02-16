@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+# set -x
 
 # Default values
 owner="goun"
@@ -113,6 +113,9 @@ for ip in $sorted_ips; do
     # Append 'localhost' to lines that contain the current hostname but not 'localhost'
     sudo sed -i "/$current_hostname/ {/localhost/ !s/$/ localhost/}" /etc/hosts
 done
+
+# Clear the inventory file
+echo "" > $INVENTORY_FILE
 
 # Start the inventory file with the [pis] section
 echo "[pis]" > $INVENTORY_FILE
