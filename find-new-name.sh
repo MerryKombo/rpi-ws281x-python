@@ -62,6 +62,9 @@ done
 # Generate the new name
 echo "${owner}-${type}-3"
 
+# Store the current hostname
+current_hostname=$(hostname)
+
 # Print the associative array sorted by IP
 for ip in $(echo "${!ip_hostname_map[@]}" | tr ' ' '\n' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4); do
     echo "IP: $ip, Hostname: ${ip_hostname_map[$ip]}"
@@ -73,13 +76,15 @@ sorted_ips=$(echo "${!ip_hostname_map[@]}" | tr ' ' '\n' | sort -n -t . -k 1,1 -
 # Update the /etc/hosts file
 for ip in $sorted_ips; do
     hostname=${ip_hostname_map[$ip]}
-    if grep -q $hostname /etc/hosts; then
-        # If the hostname is already in the file, update the existing entry
-        sudo sed -i "/$hostname/d" /etc/hosts
-    fi
-    if grep -q "$hostname.local" /etc/hosts; then
-        # If the hostname.local is already in the file, update the existing entry
-        sudo sed -i "/$hostname.local/d" /etc/hosts
+    if [[ $hostname != $current_hostname ]]; then
+        if grep -q $hostname /etc/hosts; then
+            # If the hostname is already in the file, update the existing entry
+            sudo sed -i "/$hostname/d" /etc/hosts
+        fi
+        if grep -q "$hostname.local" /etc/hosts; then
+            # If the hostname.local is already in the file, update the existing entry
+            sudo sed -i "/$hostname.local/d" /etc/hosts
+        fi
     fi
     # Check if hostname already ends with .local
     if [[ $hostname == *.local ]]; then
