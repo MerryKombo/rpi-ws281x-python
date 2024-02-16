@@ -92,6 +92,9 @@ for ip in $sorted_ips; do
             # If the hostname.local is already in the file, update the existing entry
             sudo sed -i "/$hostname.local/d" /etc/hosts
         fi
+    else
+        # If the hostname is the current hostname, remove all existing entries
+        sudo sed -i "/$hostname/d" /etc/hosts
     fi
     # Check if hostname already ends with .local
     if [[ $hostname == *.local ]]; then
