@@ -85,6 +85,7 @@
         - ./bin/pip3 install --upgrade lgpio
         - ./bin/pip3 install requests
         - ./bin/pip3 install matplotlib
+        - ./bin/pip3 install flask
 
     - name: Change script permissions
       ansible.builtin.file:
