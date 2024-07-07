@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    known_ip: 192.168.1.142
+    known_ip: 192.168.231.4
     ssh_key_path: /home/poddingue/.ssh/roundernetes.pub
     username: poddingue
     inventory_file: /home/poddingue/generated-inventory.ini
