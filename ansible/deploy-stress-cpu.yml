@@ -1,0 +1,47 @@
+---
+- name: Deploy and configure stress-cpu service
+  hosts: pis
+  become: yes
+  tasks:
+    - name: Ensure logs directory exists
+      file:
+        path: /home/poddingue/logs
+        state: directory
+        owner: poddingue
+        group: poddingue
+        mode: '0755'
+
+    - name: Copy random-stress-cpu.sh script
+      copy:
+        src: systemd/random-stress-cpu.sh
+        dest: /usr/local/bin/random-stress-cpu.sh
+        owner: poddingue
+        group: poddingue
+        mode: '0755'
+
+    - name: Copy stress-cpu.service file
+      copy:
+        src: systemd/stress-cpu.service
+        dest: /etc/systemd/system/stress-cpu.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Copy stress-cpu.timer file
+      copy:
+        src: systemd/stress-cpu.timer
+        dest: /etc/systemd/system/stress-cpu.timer
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload systemd daemon
+      systemd:
+        daemon_reload: yes
+
+    - name: Enable and start stress-cpu.timer
+      systemd:
+        name: stress-cpu.timer
+        enabled: yes
+        state: started
+
