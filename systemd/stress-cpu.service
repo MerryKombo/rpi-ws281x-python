@@ -1,0 +1,14 @@
+[Unit]
+Description=Stress CPU Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/random-stress-cpu.sh
+ExecStop=/usr/bin/pkill -f stress-cpu.py
+Restart=on-failure
+User=poddingue
+Group=poddingue
+
+[Install]
+WantedBy=multi-user.target
+

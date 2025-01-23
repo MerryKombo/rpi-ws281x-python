@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Stress CPU Service Periodically with Random Delay
+
+[Timer]
+OnCalendar=*-*-* *:0/20:00  # Every 20 minutes
+Unit=stress-cpu.service
+
+[Install]
+WantedBy=timers.target
+
