@@ -7,4 +7,3 @@ Unit=stress-cpu.service
 
 [Install]
 WantedBy=timers.target
-

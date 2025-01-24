@@ -20,4 +20,3 @@ sleep 300
 # Stop the stress-cpu service
 echo "Stopping stress-cpu.service at $(date)" >> /home/poddingue/logs/stress-cpu.log
 systemctl stop stress-cpu.service
-

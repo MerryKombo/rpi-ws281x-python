@@ -166,3 +166,64 @@ We use Ansible to automate the setup and configuration of our project. Here are 
 `sudo apt update
 sudo apt install python3-pip`
 5. Please note that these commands need to be run on the remote host where you are trying to execute the Ansible playbook.
+
+## Stress CPU Setup
+
+This repository contains the necessary files to set up a periodic CPU stress test using systemd.
+
+### Files
+- `systemd/stress-cpu.service`: Systemd service file.
+- `systemd/stress-cpu.timer`: Systemd timer file.
+- `scripts/random-stress-cpu.sh`: Script to run the stress test.
+
+### Via ansible
+
+```[WARNING]: Ansible is being run in a world writable directory (/mnt/c/support/users/FOSDEM/2025/rpi-ws281x-python), ignoring it as an ansible.cfg source.```
+
+It indicates that Ansible is ignoring our ansible.cfg file because it is located in a world-writable directory.
+This is a security feature to prevent unauthorized modifications to Ansible's configuration.
+
+#### Why This Happens
+A world-writable directory is one where all users on the system have write permissions (e.g., chmod 777).
+
+Ansible ignores ansible.cfg files in such directories to prevent potential security risks (e.g., malicious users modifying the configuration).
+
+### Workaround 
+
+Move the `ansible.cfg` file to a directory that is not world-writable. For example:
+
+1. Create a new directory for Ansible configuration:
+
+```bash
+mkdir ~/.ansible
+```
+
+2. Move the ansible.cfg file to this directory:
+
+```bash
+mv /mnt/c/support/users/FOSDEM/2025/rpi-ws281x-python/ansible.cfg ~/.ansible/ansible.cfg
+```
+
+3. Update the roles_path in the new ansible.cfg file to point to the correct location:
+
+```ini
+[defaults]
+roles_path = /mnt/c/support/users/FOSDEM/2025/rpi-ws281x-python/ansible/roles
+```
+
+### Checks
+
+After applying the above fix, run the playbook again:
+
+```bash
+ansible-playbook -i ansible/inventory/hosts ansible/playbooks/deploy-stress-test.yml
+```
+
+The warning should no longer appear, and Ansible should correctly recognize the ansible.cfg file.
+
+## Setup Instructions
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/MerryKombo/rpi-ws281x-python.git
+   cd rpi-ws281x-python
