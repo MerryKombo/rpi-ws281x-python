@@ -4,7 +4,7 @@
 set -x
 
 # Variables
-KNOWN_IP="192.168.1.142"
+KNOWN_IP="192.168.231.4"
 SSH_KEY_PATH="/home/poddingue/.ssh/roundernetes.pub"
 USERNAME="poddingue"
 INVENTORY_FILE="/home/$USERNAME/generated-inventory.ini"
