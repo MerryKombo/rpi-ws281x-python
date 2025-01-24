@@ -52,13 +52,26 @@ if [ -z "$IP_LIST" ]; then
     exit 1
 fi
 
+# Clear the inventory file
+ssh -i $SSH_KEY_PATH $USERNAME@$KNOWN_IP "> $INVENTORY_FILE" &>>$LOG_FILE
+
+# Add the [pis] section header
+ssh -i $SSH_KEY_PATH $USERNAME@$KNOWN_IP "echo '[pis]' >> $INVENTORY_FILE" &>>$LOG_FILE
+
 # Try to log into each IP and add it to the inventory file if successful
 for IP in $IP_LIST; do
     ssh -i $SSH_KEY_PATH -o BatchMode=yes -o ConnectTimeout=5 $USERNAME@$IP echo &>>$LOG_FILE
     if [ $? -eq 0 ]; then
+        # Add the IP to the [pis] section
         ssh -i $SSH_KEY_PATH $USERNAME@$KNOWN_IP "echo '$IP ansible_python_interpreter=/usr/bin/python3' >> $INVENTORY_FILE" &>>$LOG_FILE
     fi
 done
+
+# Add the [main-pi] section header
+ssh -i $SSH_KEY_PATH $USERNAME@$KNOWN_IP "echo '[main-pi]' >> $INVENTORY_FILE" &>>$LOG_FILE
+
+# Add the main Pi (KNOWN_IP) to the [main-pi] section
+ssh -i $SSH_KEY_PATH $USERNAME@$KNOWN_IP "echo '$KNOWN_IP ansible_python_interpreter=/usr/bin/python3' >> $INVENTORY_FILE" &>>$LOG_FILE
 
 # Copy the inventory file back to the local machine
 scp -i $SSH_KEY_PATH $USERNAME@$KNOWN_IP:$INVENTORY_FILE . &>>$LOG_FILE
