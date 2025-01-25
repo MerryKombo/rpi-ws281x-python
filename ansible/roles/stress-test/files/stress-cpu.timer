@@ -2,7 +2,7 @@
 Description=Run Stress CPU Service Periodically with Random Delay
 
 [Timer]
-OnCalendar=*-*-* *:0/20:00  # Every 20 minutes
+OnCalendar=*-*-* *:0/10:00
 Unit=stress-cpu.service
 
 [Install]
