@@ -1,0 +1,47 @@
+---
+- name: Ensure stress package is installed
+  apt:
+    name: stress
+    state: present
+
+- name: Create log directory
+  file:
+    path: /home/poddingue/logs/
+    state: directory
+    owner: poddingue
+    group: poddingue
+    mode: '0755'
+
+- name: Copy systemd service file
+  copy:
+    src: stress-cpu.service
+    dest: /etc/systemd/system/stress-cpu.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy systemd timer file
+  copy:
+    src: stress-cpu.timer
+    dest: /etc/systemd/system/stress-cpu.timer
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy stress test script
+  template:
+    src: random-stress-cpu.sh.j2
+    dest: /usr/local/bin/random-stress-cpu.sh
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: yes
+
+- name: Enable and start stress-cpu.timer
+  systemd:
+    name: stress-cpu.timer
+    enabled: yes
+    state: started

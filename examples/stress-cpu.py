@@ -1,13 +1,44 @@
+# stress-cpu.py
+import time
+import signal
+import sys
 import multiprocessing
 
-def worker():
-    # Worker function, runs in an infinite loop
-    while True:
-        # Perform a heavy computation
-        for _ in range(10**6):
-            pass
+# Function to simulate CPU stress
+def cpu_stress():
+    try:
+        while True:
+            for _ in range(10**6):
+                pass
+    except KeyboardInterrupt:
+        pass  # Ignore KeyboardInterrupt in child processes
 
-if __name__ == '__main__':
-    # Start as many processes as there are CPUs
-    for _ in range(multiprocessing.cpu_count()):
-        multiprocessing.Process(target=worker).start()
+# Signal handler for graceful termination
+def signal_handler(sig, frame):
+    print("Received termination signal. Exiting...", file=sys.stderr)
+    for process in processes:
+        process.terminate()  # Terminate child processes
+        process.join()  # Wait for child processes to finish
+    sys.exit(0)
+
+# Register the signal handler
+signal.signal(signal.SIGTERM, signal_handler)
+
+# List to store child processes
+processes = []
+
+# Start multiple processes to stress the CPU
+try:
+    for _ in range(multiprocessing.cpu_count()):  # Use all CPU cores
+        process = multiprocessing.Process(target=cpu_stress)
+        process.start()
+        processes.append(process)
+
+    # Keep the main process alive
+    while True:
+        time.sleep(1)
+except KeyboardInterrupt:
+    print("Stopping stress-cpu.py", file=sys.stderr)
+    for process in processes:
+        process.terminate()  # Terminate child processes
+        process.join()  # Wait for child processes to finish
